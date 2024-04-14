@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
 extension ContextExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
@@ -18,4 +19,10 @@ extension ContextExtension on BuildContext {
       );
 
   void popScreen() => Navigator.of(this).pop();
+}
+
+extension ProviderExt on BuildContext {
+  provider<T>({bool listen = true}) {
+    return Provider.of<T>(this, listen: listen);
+  }
 }

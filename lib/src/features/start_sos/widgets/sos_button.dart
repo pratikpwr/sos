@@ -3,7 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:sos_app/src/features/start_sos/providers/sos_button_provider.dart';
 
 class SOSButton extends StatefulWidget {
-  const SOSButton({super.key});
+  const SOSButton({
+    super.key,
+    required this.onSend,
+  });
+
+  final VoidCallback onSend;
 
   @override
   State<SOSButton> createState() => _SOSButtonState();
@@ -41,11 +46,14 @@ class _SOSButtonState extends State<SOSButton> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<SOSButtonProvider>(
-      builder: (context, provider, child) {
+      builder: (context, btnProvider, _) {
         return GestureDetector(
-          onTapDown: (_) => provider.startSOS(_animationController),
-          onTapUp: (_) => provider.stopSOS(_animationController),
-          onTapCancel: () => provider.stopSOS(_animationController),
+          onTapDown: (_) => btnProvider.startSOS(
+            animationController: _animationController,
+            onSend: widget.onSend,
+          ),
+          onTapUp: (_) => btnProvider.stopSOS(_animationController),
+          onTapCancel: () => btnProvider.stopSOS(_animationController),
           child: Material(
             shape: const CircleBorder(),
             color: Colors.transparent,
@@ -84,10 +92,10 @@ class _SOSButtonState extends State<SOSButton> with TickerProviderStateMixin {
                               animation: _textSizeAnimation,
                               builder: (context, child) {
                                 return Text(
-                                  provider.buttonText,
+                                  btnProvider.buttonText,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: provider.buttonText.length > 1
+                                    fontSize: btnProvider.buttonText.length > 1
                                         ? 32
                                         : _textSizeAnimation.value,
                                     fontWeight: FontWeight.bold,

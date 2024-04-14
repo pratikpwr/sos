@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sos_app/src/core/extensions/context_extension.dart';
 import 'package:sos_app/src/features/start_sos/providers/location_provider.dart';
+import 'package:sos_app/src/features/start_sos/providers/send_sos_provider.dart';
 import 'package:sos_app/src/features/start_sos/providers/sos_button_provider.dart';
 import 'package:sos_app/src/features/start_sos/widgets/current_location_widget.dart';
 import 'package:sos_app/src/features/start_sos/widgets/sos_button.dart';
+
+import '../../../core/injector/injection_container.dart';
+import '../../../core/utils/utils.dart';
+import 'attach_media_screen.dart';
 
 class StartSOSScreen extends StatelessWidget {
   const StartSOSScreen({super.key});
@@ -23,34 +28,63 @@ class StartSOSScreen extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => SOSButtonProvider()),
           ChangeNotifierProvider(
-              create: (context) => LocationProvider()..getLocation()),
+              create: (context) => LocationProvider(sl())..getLocation()),
+          ChangeNotifierProvider(create: (context) => SendSOSProvider(sl())),
         ],
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              SizedBox(height: 12),
-              CurrentLocationWidget(),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Hold the Button for ${kMaxSeconds + 1} seconds to send Signal!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
+        child: Builder(builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                const CurrentLocationWidget(),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Hold the Button for ${kMaxSeconds + 1} seconds to send Signal!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 36),
-                    SOSButton(),
-                  ],
+                      const SizedBox(height: 36),
+                      SOSButton(
+                        onSend: () {
+                          final sendProvider =
+                              context.provider<SendSOSProvider>(listen: false);
+                          final locationProvider =
+                              context.provider<LocationProvider>(listen: false);
+
+                          sendProvider.sendSOS(
+                            position: locationProvider.position,
+                            onResponse: (status, sosId) {
+                              if (status == SosStatus.sent) {
+                                if (sosId != null) {
+                                  context.pushScreen(AttachMediaScreen(
+                                      sosId: sendProvider.sosId!));
+                                } else {
+                                  showSnackBar(context,
+                                      "Sorry, Something went wrong while sending SOS!");
+                                }
+                              }
+                              if (sendProvider.sosStatus == SosStatus.failed) {
+                                showSnackBar(
+                                    context, "Sorry, We Failed to Send SOS!");
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }

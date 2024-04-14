@@ -13,7 +13,10 @@ class SOSButtonProvider extends ChangeNotifier {
   Timer? _timer;
   bool? hasVibration;
 
-  Future<void> startSOS(AnimationController animationController) async {
+  Future<void> startSOS({
+    required AnimationController animationController,
+    required VoidCallback onSend,
+  }) async {
     isPressed = true;
     notifyListeners();
 
@@ -50,9 +53,9 @@ class SOSButtonProvider extends ChangeNotifier {
       } else {
         timer.cancel();
         if (isPressed) {
+          onSend();
           buttonText = "SENT";
           notifyListeners();
-          debugPrint("SOS Sent");
         }
       }
     });

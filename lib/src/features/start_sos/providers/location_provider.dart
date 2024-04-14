@@ -6,7 +6,9 @@ import 'package:sos_app/src/core/extensions/placemark_extension.dart';
 import '../../../core/utils/location_util.dart';
 
 class LocationProvider extends ChangeNotifier {
-  final locationUtil = LocationUtilImpl();
+  final LocationUtil locationUtil;
+
+  LocationProvider(this.locationUtil);
 
   bool isLoading = false;
   bool hasError = false;
@@ -23,7 +25,6 @@ class LocationProvider extends ChangeNotifier {
         (err) {
           isLoading = false;
           hasError = true;
-          notifyListeners();
         },
         (pos) async {
           position = pos;
@@ -37,15 +38,14 @@ class LocationProvider extends ChangeNotifier {
           } else {
             address = placeMarks.first.readableAddress();
           }
-
           isLoading = false;
-          notifyListeners();
         },
       );
     } catch (err) {
       isLoading = false;
       hasError = true;
-      notifyListeners();
     }
+
+    notifyListeners();
   }
 }
