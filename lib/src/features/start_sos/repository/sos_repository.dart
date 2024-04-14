@@ -27,6 +27,8 @@ class SOSRepositoryImpl implements SOSRepository {
 
   @override
   Future<Either<Failure, String>> sendSOS({Position? position}) async {
+    // parameters
+    // position, userId
     await Future.delayed(Duration(milliseconds: 300));
     return Right("sosId");
   }

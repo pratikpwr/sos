@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sos_app/src/features/my_circle/screen/my_circle_screen.dart';
+import 'package:sos_app/src/features/user_settings/screen/user_settings_screen.dart';
 import 'package:sos_app/src/ui/themes/text_theme.dart';
 
 import 'features/start_sos/screen/start_sos_screen.dart';
@@ -67,9 +69,9 @@ class _SOSBottomNavBarState extends State<SOSBottomNavBar> {
       case 0:
         return StartSOSScreen();
       case 1:
-        return Center(child: Text("My Circle"));
+        return MyCircleScreen();
       case 2:
-        return Center(child: Text("Settings"));
+        return UserSettingsScreen();
       default:
         return StartSOSScreen();
     }

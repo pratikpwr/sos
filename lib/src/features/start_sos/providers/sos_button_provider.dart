@@ -63,7 +63,6 @@ class SOSButtonProvider extends ChangeNotifier {
 
   void stopSOS(AnimationController controller) {
     isPressed = true;
-    notifyListeners();
 
     if (hasVibration ?? false) Vibration.cancel();
     _timer?.cancel();

@@ -31,7 +31,6 @@ extension DateTimeExtenion on DateTime {
   }
 }
 
-
 extension TimeOfDayExtenion on TimeOfDay {
   String get hhmmA {
     return DateFormat('hh:mm a').format(DateTime(0, 0, 0, hour, minute));
