@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sos_app/src/features/start_sos/providers/send_sos_provider.dart';
+import 'package:sos_app/src/features/start_sos/providers/sos_button_provider.dart';
 
 class SOSButton extends StatefulWidget {
   const SOSButton({super.key});
@@ -40,7 +40,7 @@ class _SOSButtonState extends State<SOSButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SendSOSProvider>(
+    return Consumer<SOSButtonProvider>(
       builder: (context, provider, child) {
         return GestureDetector(
           onTapDown: (_) => provider.startSOS(_animationController),

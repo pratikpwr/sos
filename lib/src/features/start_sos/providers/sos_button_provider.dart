@@ -5,7 +5,7 @@ import 'package:vibration/vibration.dart';
 
 const int kMaxSeconds = 2;
 
-class SendSOSProvider extends ChangeNotifier {
+class SOSButtonProvider extends ChangeNotifier {
   bool isPressed = false;
   int countDownSeconds = kMaxSeconds;
   String buttonText = "SOS";

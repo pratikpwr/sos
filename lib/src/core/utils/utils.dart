@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 import '../error/exception.dart';
 import '../error/failures.dart';
@@ -23,4 +24,12 @@ Future<Either<Failure, T>> resultOrFailure<T>({
   } else {
     return const Left(NoInternetFailure());
   }
+}
+
+void showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+    ),
+  );
 }

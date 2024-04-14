@@ -15,7 +15,63 @@ class MyApp extends StatelessWidget {
         textTheme: textTheme,
         useMaterial3: true,
       ),
-      home: const StartSOSScreen(),
+      home: const SOSBottomNavBar(),
     );
+  }
+}
+
+class SOSBottomNavBar extends StatefulWidget {
+  const SOSBottomNavBar({super.key});
+
+  @override
+  State<SOSBottomNavBar> createState() => _SOSBottomNavBarState();
+}
+
+class _SOSBottomNavBarState extends State<SOSBottomNavBar> {
+  int currentPageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            selectedIcon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.group_rounded),
+            icon: Icon(Icons.group_outlined),
+            label: 'My Circle',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.settings_rounded),
+            icon: Icon(Icons.settings_outlined),
+            label: 'Settings',
+          ),
+        ],
+      ),
+      body: _currentWidget(),
+    );
+  }
+
+  Widget _currentWidget() {
+    switch (currentPageIndex) {
+      case 0:
+        return StartSOSScreen();
+      case 1:
+        return Center(child: Text("My Circle"));
+      case 2:
+        return Center(child: Text("Settings"));
+      default:
+        return StartSOSScreen();
+    }
   }
 }
