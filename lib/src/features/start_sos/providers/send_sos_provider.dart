@@ -15,24 +15,24 @@ class SendSOSProvider extends ChangeNotifier {
   SendSOSProvider(this._repository);
 
   SosStatus sosStatus = SosStatus.initial;
-  String? sosId;
+  int? sosId;
 
   Future<void> sendSOS({
     required Position? position,
-    Function(SosStatus status, String? sosId)? onResponse,
+    required Function(SosStatus status, int? sosId) onResponse,
   }) async {
     final result = await _repository.sendSOS(position: position);
 
     result.fold(
       (failure) {
         sosStatus = SosStatus.failed;
-        onResponse!(sosStatus, null);
+        onResponse(sosStatus, null);
       },
       (id) {
         sosStatus = SosStatus.sent;
         sosId = id;
 
-        onResponse!(sosStatus, sosId);
+        onResponse(sosStatus, sosId);
       },
     );
 

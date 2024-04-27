@@ -22,7 +22,7 @@ extension ContextExtension on BuildContext {
 }
 
 extension ProviderExt on BuildContext {
-  provider<T>({bool listen = true}) {
+  T provider<T>({bool listen = true}) {
     return Provider.of<T>(this, listen: listen);
   }
 }

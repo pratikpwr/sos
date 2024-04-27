@@ -9,7 +9,7 @@ import 'package:sos_app/src/features/start_sos/widgets/sos_button.dart';
 
 import '../../../core/injector/injection_container.dart';
 import '../../../core/utils/utils.dart';
-import 'attach_media_screen.dart';
+import '../../attach_media/screens/attach_media_screen.dart';
 
 class StartSOSScreen extends StatelessWidget {
   const StartSOSScreen({super.key});

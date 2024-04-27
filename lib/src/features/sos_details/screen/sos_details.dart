@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class AttachMediaScreen extends StatelessWidget {
-  const AttachMediaScreen({
+class SOSDetails extends StatelessWidget {
+  final int sosId;
+
+  const SOSDetails({
     super.key,
     required this.sosId,
   });
 
-  final String sosId;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("We have sent Signal!"),
+      body: AppBar(
+        title: Text("Help is on the way!!!"),
       ),
     );
   }
