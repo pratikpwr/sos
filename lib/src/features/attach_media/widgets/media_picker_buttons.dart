@@ -21,60 +21,50 @@ class _PhotoAndVideoPickerButtonState extends State<PhotoAndVideoPickerButton> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                final photo = await _picker.pickImage(
-                    source: ImageSource.camera, imageQuality: 50);
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.camera_alt_rounded,
+            size: 28,
+          ),
+          onPressed: () async {
+            final photo = await _picker.pickImage(
+                source: ImageSource.camera, imageQuality: 50);
 
-                if (photo != null) {
-                  widget.onMediaPicked([photo]);
-                }
-              },
-              child: const Text('Take Photo'),
-            ),
-            const SizedBox(width: 16),
-            ElevatedButton(
-              onPressed: () async {
-                final XFile? video = await _picker.pickVideo(
-                  source: ImageSource.camera,
-                );
-                if (video != null) {
-                  widget.onMediaPicked([video]);
-                }
-              },
-              child: const Text('Record Video'),
-            ),
-          ],
+            if (photo != null) {
+              widget.onMediaPicked([photo]);
+            }
+          },
+          label: const Text('Take Photo'),
         ),
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                final photos = await _picker.pickMultiImage(imageQuality: 50);
-
-                if (photos.isNotEmpty) {
-                  widget.onMediaPicked(photos);
-                }
-              },
-              child: const Text('Select Photos'),
-            ),
-            const SizedBox(width: 16),
-            ElevatedButton(
-              onPressed: () async {
-                final videos =
-                    await _picker.pickMultipleMedia(imageQuality: 50);
-                if (videos.isNotEmpty) {
-                  widget.onMediaPicked(videos);
-                }
-              },
-              child: const Text('Select Videos'),
-            ),
-          ],
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.videocam_rounded,
+            size: 28,
+          ),
+          onPressed: () async {
+            final XFile? video = await _picker.pickVideo(
+              source: ImageSource.camera,
+            );
+            if (video != null) {
+              widget.onMediaPicked([video]);
+            }
+          },
+          label: const Text('Record Video'),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          icon: const Icon(
+            Icons.perm_media_rounded,
+            size: 28,
+          ),
+          onPressed: () async {
+            final videos = await _picker.pickMultipleMedia(imageQuality: 50);
+            if (videos.isNotEmpty) {
+              widget.onMediaPicked(videos);
+            }
+          },
+          label: const Text('Select From Gallery'),
         ),
       ],
     );

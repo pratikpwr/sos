@@ -27,7 +27,7 @@ class SOSRepositoryImpl implements SOSRepository {
 
   @override
   Future<Either<Failure, int>> sendSOS({Position? position}) async {
-    int userId = 4;
+    int userId = 5;
 
     final data = {
       "lat": position?.latitude,
