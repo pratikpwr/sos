@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sos_app/src/core/extensions/context_extension.dart';
+import 'package:sos_app/src/features/sos_details/screen/receiver_sos_alert_screen.dart';
 import 'package:sos_app/src/features/start_sos/providers/location_provider.dart';
 import 'package:sos_app/src/features/start_sos/providers/send_sos_provider.dart';
 import 'package:sos_app/src/features/start_sos/providers/sos_button_provider.dart';
@@ -27,8 +28,6 @@ class StartSOSScreen extends StatelessWidget {
       body: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => SOSButtonProvider()),
-          ChangeNotifierProvider(
-              create: (context) => LocationProvider(sl())..getLocation()),
           ChangeNotifierProvider(create: (context) => SendSOSProvider(sl())),
         ],
         child: Builder(builder: (context) {
@@ -37,7 +36,7 @@ class StartSOSScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 12),
-                const CurrentLocationWidget(),
+                const LocationWidget.current(),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +77,12 @@ class StartSOSScreen extends StatelessWidget {
                           );
                         },
                       ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     context.pushScreen(ReceiverAlertScreen(sosId: 28));
+                      //   },
+                      //   child: Text('SOS Alert'),
+                      // ),
                     ],
                   ),
                 ),

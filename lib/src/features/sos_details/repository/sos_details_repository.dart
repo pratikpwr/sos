@@ -27,6 +27,24 @@ class SOSDetailsRepositoryImpl implements SOSDetailsRepository {
 
   @override
   Future<Either<Failure, SosDetailsModel>> sosDetails(int sosId) async {
+    // return Right(
+    //   SosDetailsModel(
+    //     sosId: 28,
+    //     isActive: true,
+    //     createdOn: DateTime(2024),
+    //     mediaFileUrls: [],
+    //     userId: 20,
+    //     lat: 23.42424,
+    //     long: 34.23141,
+    //     userDetails: UserDetailsModel(
+    //         id: 5,
+    //         name: 'Cumeet Sangle',
+    //         phone: "29842324424",
+    //         bloodGroup: "AB-ve",
+    //         photoUrl: 'https://picsum.photos/200'),
+    //     acceptorUsers: [],
+    //   ),
+    // );
     try {
       final result = await apiClient.request(
         HttpMethod.get,

@@ -16,9 +16,27 @@ class LocationProvider extends ChangeNotifier {
   Position? position;
   String address = "";
 
-  Future<void> getLocation() async {
+  Future<void> getLocation({
+    bool isCurrent = true,
+    double? lat,
+    double? long,
+  }) async {
     isLoading = true;
     notifyListeners();
+
+    if (!isCurrent) {
+      if (lat != null && long != null) {
+        address = await _getAddress(lat, long);
+      } else {
+        address = "Not Available";
+      }
+
+      isLoading = false;
+      notifyListeners();
+      return;
+    }
+
+    // else get current location
     try {
       final result = await locationUtil.getCurrentLocation();
       result.fold(
@@ -28,16 +46,7 @@ class LocationProvider extends ChangeNotifier {
         },
         (pos) async {
           position = pos;
-          List<Placemark> placeMarks = await placemarkFromCoordinates(
-            pos.latitude,
-            pos.longitude,
-          );
-
-          if (placeMarks.isEmpty) {
-            address = "Lat : ${pos.latitude}, Long: ${pos.longitude}";
-          } else {
-            address = placeMarks.first.readableAddress();
-          }
+          address = await _getAddress(pos.latitude, pos.longitude);
           isLoading = false;
         },
       );
@@ -47,5 +56,18 @@ class LocationProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<String> _getAddress(
+    double lat,
+    double long,
+  ) async {
+    List<Placemark> placeMarks = await placemarkFromCoordinates(lat, long);
+
+    if (placeMarks.isEmpty) {
+      return "Lat : ${lat}, Long: ${long}";
+    } else {
+      return placeMarks.first.readableAddress();
+    }
   }
 }
