@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "837547852281",
+    "project_id": "emergancytesting",
+    "storage_bucket": "emergancytesting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837547852281:android:9ae74943d84ad4d1f2fd28",
+        "android_client_info": {
+          "package_name": "com.example.sos_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDdzRBH1_M3d3U7LgBO1vWSG7LS-iHqLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

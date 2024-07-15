@@ -57,6 +57,7 @@ class UserSOSDetailsScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          const SizedBox(height: 12),
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: MarkSafeButton(sosId: sosId),

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sos_app/src/features/sos_details/models/user_details_model.dart';
 import 'package:sos_app/src/features/sos_details/providers/receiver_alert_provider.dart';
-import 'package:sos_app/src/features/start_sos/widgets/current_location_widget.dart';
+import 'package:sos_app/src/features/sos_details/screen/receiver_sos_details_screen.dart';
+import 'package:sos_app/src/ui/atomic/molecules/current_location_widget.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/injector/injection_container.dart';
@@ -76,7 +77,7 @@ class ReceiverAlertScreen extends StatelessWidget {
                             lat: provider.sosDetails!.lat ?? 0,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Consumer<ReceiverAlertProvider>(
                           builder: (context, alertProvider, child) {
                             if (alertProvider.acceptStatus ==
@@ -118,7 +119,16 @@ class ReceiverAlertScreen extends StatelessWidget {
                                     onPressed: () {
                                       alertProvider.acceptSOSRequest(
                                         sosId,
-                                        onAccept: () {},
+                                        onAccept: () {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ReceiverSOSDetailsScreen(
+                                                sosId: sosId,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       );
                                     },
                                     icon: const Icon(

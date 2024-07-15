@@ -27,7 +27,7 @@ class SOSDetailsProvider extends ChangeNotifier {
 
   Future<void> getSOSDetails(int sosId) async {
     // recheck sos details
-    Timer.periodic(const Duration(seconds: 15), (timer) {
+    Timer.periodic(const Duration(seconds: 30), (timer) {
       if (!_disposed && !_stopSyncing) getSOSDetails(sosId);
     });
 

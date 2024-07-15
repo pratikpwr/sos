@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sos_app/src/core/extensions/context_extension.dart';
 import 'package:sos_app/src/features/sos_details/screen/receiver_sos_alert_screen.dart';
+import 'package:sos_app/src/features/sos_details/screen/receiver_sos_details_screen.dart';
 import 'package:sos_app/src/features/start_sos/providers/location_provider.dart';
 import 'package:sos_app/src/features/start_sos/providers/send_sos_provider.dart';
 import 'package:sos_app/src/features/start_sos/providers/sos_button_provider.dart';
-import 'package:sos_app/src/features/start_sos/widgets/current_location_widget.dart';
+import 'package:sos_app/src/ui/atomic/molecules/current_location_widget.dart';
 import 'package:sos_app/src/features/start_sos/widgets/sos_button.dart';
 
 import '../../../core/injector/injection_container.dart';
@@ -77,12 +78,12 @@ class StartSOSScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     context.pushScreen(ReceiverAlertScreen(sosId: 28));
-                      //   },
-                      //   child: Text('SOS Alert'),
-                      // ),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));
+                        },
+                        child: Text('SOS Alert'),
+                      ),
                     ],
                   ),
                 ),
