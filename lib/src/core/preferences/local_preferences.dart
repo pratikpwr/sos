@@ -13,6 +13,7 @@ class LocalPreferences {
 
   Future<void> init() async {
     sharedPreferences = await SharedPreferences.getInstance();
+    return;
   }
 
   Future<bool> set<T>(String key, T value) async {

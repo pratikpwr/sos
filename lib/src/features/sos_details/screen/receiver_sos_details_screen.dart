@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/injector/injection_container.dart';
@@ -177,7 +178,28 @@ class ReceiverSOSDetailsScreen extends StatelessWidget {
                 user.bloodGroup ?? "-",
                 style:
                     context.textTheme.titleLarge?.copyWith(color: Colors.white),
-              )
+              ),
+              SizedBox(height: 8),
+              InkWell(
+                onTap: () async {
+                  final url = Uri.parse('tel:${user.phone}');
+                  if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.call_rounded, color: Colors.white, size: 28),
+                    SizedBox(width: 12),
+                    Text(
+                      user.phone,
+                      style: context.textTheme.titleLarge
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ],

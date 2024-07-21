@@ -28,47 +28,47 @@ class SOSDetailsRepositoryImpl implements SOSDetailsRepository {
 
   @override
   Future<Either<Failure, SosDetailsModel>> sosDetails(int sosId) async {
-    return Right(
-      SosDetailsModel(
-        sosId: 28,
-        isActive: true,
-        createdOn: DateTime(2024),
-        mediaFileUrls: [
-          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-          'https://picsum.photos/400',
-        ],
-        userId: 20,
-        lat: 23.42424,
-        long: 34.23141,
-        userDetails: UserDetailsModel(
-          id: 5,
-          name: 'Cumeet Sangle',
-          phone: "29842324424",
-          bloodGroup: "AB-ve",
-          photoUrl: 'https://picsum.photos/200',
-        ),
-        acceptorUsers: [
-          UserDetailsModel(
-            id: 5,
-            name: 'Lumeet Dangle',
-            phone: "29842324424",
-            bloodGroup: "AB-ve",
-            photoUrl: 'https://picsum.photos/100',
-          )
-        ],
-      ),
-    );
+    // return Right(
+    //   SosDetailsModel(
+    //     sosId: 28,
+    //     isActive: true,
+    //     createdOn: DateTime(2024),
+    //     mediaFileUrls: [
+    //       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //       'https://picsum.photos/400',
+    //     ],
+    //     userId: 20,
+    //     lat: 23.42424,
+    //     long: 34.23141,
+    //     userDetails: UserDetailsModel(
+    //       id: 5,
+    //       name: 'Cumeet Sangle',
+    //       phone: "29842324424",
+    //       bloodGroup: "AB-ve",
+    //       photoUrl: 'https://picsum.photos/200',
+    //     ),
+    //     acceptorUsers: [
+    //       UserDetailsModel(
+    //         id: 5,
+    //         name: 'Lumeet Dangle',
+    //         phone: "29842324424",
+    //         bloodGroup: "AB-ve",
+    //         photoUrl: 'https://picsum.photos/100',
+    //       )
+    //     ],
+    //   ),
+    // );
     try {
       final result = await apiClient.request(
         HttpMethod.get,

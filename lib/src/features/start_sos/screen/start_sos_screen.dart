@@ -80,8 +80,12 @@ class StartSOSScreen extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));
+                          // context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));\
+
+                          context.pushScreen(ReceiverAlertScreen(
+                              sosId: 38));
                         },
+
                         child: Text('SOS Alert'),
                       ),
                     ],
