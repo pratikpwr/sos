@@ -4,13 +4,27 @@ import 'package:sos_app/src/features/auth/providers/auth_provider.dart';
 import 'package:sos_app/src/features/auth/providers/auth_status_provider.dart';
 import 'package:sos_app/src/features/auth/screens/sign_in_screen.dart';
 import 'package:sos_app/src/features/start_sos/providers/location_provider.dart';
+import 'package:sos_app/src/notification_config.dart';
 import 'package:sos_app/src/ui/atomic/organism/sos_bttom_bar.dart';
 import 'package:sos_app/src/ui/themes/text_theme.dart';
 
 import 'core/injector/injection_container.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await NotificationConfig.setupForegroundMessaging(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

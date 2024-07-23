@@ -23,6 +23,10 @@ abstract class AuthRepository {
   });
 
   Future<Either<Failure, UserDetailsModel?>> getCurrentUser();
+
+  Future<Either<Failure, bool>> sendFCMToken({
+    required String fcmToken,
+  });
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -44,6 +48,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   Future<bool> saveUser(UserDetailsModel user) async {
+    await prefs.init();
+    await prefs.set(PrefsConst.userId, user.id);
     return await prefs.set(PrefsConst.currentUser, user.toJson());
   }
 
@@ -51,9 +57,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, bool>> signIn({required String phone}) async {
     try {
       final result = await apiClient.request(
-        HttpMethod.post,
-        '$baseUrl/api/signin',
-        body: {'phone': phone},
+        HttpMethod.get,
+        '$baseUrl/api/SignIn/$phone',
       );
 
       if (result.statusCode == 404) {
@@ -72,9 +77,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, bool>> signUp({required String phone}) async {
     try {
       final result = await apiClient.request(
-        HttpMethod.post,
-        '$baseUrl/api/signup',
-        body: {'phone': phone},
+        HttpMethod.get,
+        '$baseUrl/api/SignUp/$phone',
       );
 
       if (result.statusCode == 200) {
@@ -94,10 +98,11 @@ class AuthRepositoryImpl implements AuthRepository {
     required bool isSignIn,
   }) async {
     try {
+      final path = isSignIn ? 'SignInVerifyOtp' : 'SignUpVerifyOtp';
       final result = await apiClient.request(
         HttpMethod.post,
-        '$baseUrl/api/verifyotp',
-        body: {'phone': phone, 'otp': otp},
+        '$baseUrl/api/$path',
+        body: {'mobileNo': phone, 'otp': otp},
       );
 
       if (result.statusCode == 404) {
@@ -106,6 +111,30 @@ class AuthRepositoryImpl implements AuthRepository {
         final user = UserDetailsModel.fromJson(result.data['data']);
         saveUser(user);
         return Right(user);
+      } else {
+        return Left(ServerFailure(result.data['message']));
+      }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendFCMToken({
+    required String fcmToken,
+  }) async {
+    final userId = prefs.get(PrefsConst.userId);
+    try {
+      final result = await apiClient.request(
+        HttpMethod.put,
+        '$baseUrl/api/FCMToken/$userId',
+        body: {
+          'fcmToken': fcmToken,
+        },
+      );
+
+      if (result.statusCode == 200) {
+        return Right(true);
       } else {
         return Left(ServerFailure(result.data['message']));
       }
