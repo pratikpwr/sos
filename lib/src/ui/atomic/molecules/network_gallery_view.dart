@@ -15,8 +15,7 @@ class NetworkGalleryView extends StatefulWidget {
 }
 
 class _NetworkGalleryViewState extends State<NetworkGalleryView> {
-  bool isPlaying = false;
-  late VideoPlayerController videoController;
+  VideoPlayerController? videoController;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +42,7 @@ class _NetworkGalleryViewState extends State<NetworkGalleryView> {
   }
 
   Widget _buildMediaPreview(String media, {bool isPreview = true}) {
+    bool isPlaying = false;
     return FutureBuilder<String>(
       future: identifyUrlType(media),
       // This calls the method to identify the media type
@@ -55,70 +55,73 @@ class _NetworkGalleryViewState extends State<NetworkGalleryView> {
               Uri.parse(media),
             );
             return FutureBuilder(
-              future: videoController.initialize(),
+              future: videoController?.initialize(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return isPreview
-                      ? Stack(
-                          children: [
-                            VideoPlayer(videoController),
-                            Positioned.fill(
-                              child: InkWell(
-                                onTap: () {
-                                  _showMediaDialog(context, media);
-                                },
-                                child: Icon(
-                                  Icons.play_arrow_rounded,
-                                  size: 52,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      : AspectRatio(
-                          aspectRatio: videoController.value.aspectRatio,
-                          child: Stack(
-                            alignment: Alignment.center,
+                  return StatefulBuilder(builder: (context, innerSS) {
+                    return isPreview
+                        ? Stack(
                             children: [
-                              AspectRatio(
-                                aspectRatio: videoController.value.aspectRatio,
-                                child: VideoPlayer(videoController),
-                              ),
+                              VideoPlayer(videoController!),
                               Positioned.fill(
-                                child: SizedBox(
-                                  child: isPlaying
-                                      ? InkWell(
-                                          onTap: () {
-                                            videoController.pause();
-                                            setState(() {
-                                              isPlaying = false;
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.pause_rounded,
-                                            size: 52,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            videoController.play();
-                                            setState(() {
-                                              isPlaying = true;
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.play_arrow_rounded,
-                                            size: 52,
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                                child: InkWell(
+                                  onTap: () {
+                                    _showMediaDialog(context, media);
+                                  },
+                                  child: Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 52,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               )
                             ],
-                          ),
-                        );
+                          )
+                        : AspectRatio(
+                            aspectRatio: videoController!.value.aspectRatio,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                AspectRatio(
+                                  aspectRatio:
+                                      videoController!.value.aspectRatio,
+                                  child: VideoPlayer(videoController!),
+                                ),
+                                Positioned.fill(
+                                  child: SizedBox(
+                                    child: isPlaying
+                                        ? InkWell(
+                                            onTap: () {
+                                              videoController!.pause();
+                                              innerSS(() {
+                                                isPlaying = false;
+                                              });
+                                            },
+                                            child: Icon(
+                                              Icons.pause_rounded,
+                                              size: 52,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              videoController!.play();
+                                              innerSS(() {
+                                                isPlaying = true;
+                                              });
+                                            },
+                                            child: Icon(
+                                              Icons.play_arrow_rounded,
+                                              size: 52,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                  });
                 } else {
                   return const CupertinoActivityIndicator();
                 }
@@ -177,12 +180,8 @@ class _NetworkGalleryViewState extends State<NetworkGalleryView> {
                     ),
                     iconSize: 42,
                     onPressed: () {
-                      if (isPlaying) {
-                        videoController.pause();
-                        setState(() {
-                          isPlaying = false;
-                        });
-                      }
+                      videoController?.pause();
+
                       context.popScreen();
                     },
                   ),

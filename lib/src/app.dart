@@ -4,7 +4,7 @@ import 'package:sos_app/src/features/auth/providers/auth_provider.dart';
 import 'package:sos_app/src/features/auth/providers/auth_status_provider.dart';
 import 'package:sos_app/src/features/auth/screens/sign_in_screen.dart';
 import 'package:sos_app/src/features/start_sos/providers/location_provider.dart';
-import 'package:sos_app/src/notification_config.dart';
+import 'package:sos_app/src/core/utils/notification_config.dart';
 import 'package:sos_app/src/ui/atomic/organism/sos_bttom_bar.dart';
 import 'package:sos_app/src/ui/themes/text_theme.dart';
 

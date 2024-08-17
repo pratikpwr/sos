@@ -57,7 +57,8 @@ class StartSOSScreen extends StatelessWidget {
                               context.provider<SendSOSProvider>(listen: false);
                           final locationProvider =
                               context.provider<LocationProvider>(listen: false);
-
+                          showSnackBar(context,
+                              "We are sending your SOS request, Please wait!");
                           sendProvider.sendSOS(
                             position: locationProvider.position,
                             onResponse: (status, sosId) {
@@ -78,16 +79,14 @@ class StartSOSScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));\
-
-                          context.pushScreen(ReceiverAlertScreen(
-                              sosId: 38));
-                        },
-
-                        child: Text('SOS Alert'),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));\
+                      //     context.pushScreen(ReceiverAlertScreen(
+                      //         sosId: 53));
+                      //   },
+                      //   child: Text('SOS Alert'),
+                      // ),
                     ],
                   ),
                 ),

@@ -7,10 +7,17 @@ import 'package:sos_app/src/core/extensions/context_extension.dart';
 import 'package:sos_app/src/core/extensions/xfile_extension.dart';
 import 'package:video_player/video_player.dart';
 
-class GalleryView extends StatelessWidget {
+class GalleryView extends StatefulWidget {
   final List<XFile> mediaFiles;
 
   GalleryView({required this.mediaFiles});
+
+  @override
+  State<GalleryView> createState() => _GalleryViewState();
+}
+
+class _GalleryViewState extends State<GalleryView> {
+  VideoPlayerController? videoController;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +27,14 @@ class GalleryView extends StatelessWidget {
         crossAxisSpacing: 4.0,
         mainAxisSpacing: 4.0,
       ),
-      itemCount: mediaFiles.length,
+      itemCount: widget.mediaFiles.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            _showMediaDialog(context, mediaFiles[index]);
+            _showMediaDialog(context, widget.mediaFiles[index]);
           },
           child: GridTile(
-            child: _buildMediaPreview(mediaFiles[index]),
+            child: _buildMediaPreview(widget.mediaFiles[index]),
           ),
         );
       },
@@ -35,36 +42,78 @@ class GalleryView extends StatelessWidget {
   }
 
   Widget _buildMediaPreview(XFile media, {bool isPreview = true}) {
-    final videoController = VideoPlayerController.file(File(media.path));
+    bool isPlaying = false;
     // Check if media is image or video and return appropriate preview
     if (media.isVideo()) {
+      videoController = VideoPlayerController.file(File(media.path));
       // For videos, return a video player widget
       return FutureBuilder(
-        future: videoController.initialize(),
+        future: videoController?.initialize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Stack(
-              children: [
-                VideoPlayer(videoController),
-                Positioned.fill(
-                  child: SizedBox(
-                    height: 52,
-                    width: 52,
-                    child: InkWell(
-                      onTap: () {
-                        if (isPreview) return;
-                        videoController.play();
-                      },
-                      child: Icon(
-                        Icons.play_arrow_rounded,
-                        size: 52,
-                        color: Colors.white,
+            return StatefulBuilder(builder: (context, innerSS) {
+              return isPreview
+                  ? Stack(
+                      children: [
+                        VideoPlayer(videoController!),
+                        Positioned.fill(
+                          child: InkWell(
+                            onTap: () {
+                              _showMediaDialog(context, media);
+                            },
+                            child: Icon(
+                              Icons.play_arrow_rounded,
+                              size: 52,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : AspectRatio(
+                      aspectRatio: videoController!.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: videoController!.value.aspectRatio,
+                            child: VideoPlayer(videoController!),
+                          ),
+                          Positioned.fill(
+                            child: SizedBox(
+                              child: isPlaying
+                                  ? InkWell(
+                                      onTap: () {
+                                        videoController!.pause();
+                                        innerSS(() {
+                                          isPlaying = false;
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.pause_rounded,
+                                        size: 52,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : InkWell(
+                                      onTap: () {
+                                        videoController!.play();
+                                        innerSS(() {
+                                          isPlaying = true;
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.play_arrow_rounded,
+                                        size: 52,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            );
+                    );
+            });
           } else {
             return const CupertinoActivityIndicator();
           }
@@ -103,6 +152,7 @@ class GalleryView extends StatelessWidget {
                     ),
                     iconSize: 42,
                     onPressed: () {
+                      videoController?.pause();
                       context.popScreen();
                     },
                   ),

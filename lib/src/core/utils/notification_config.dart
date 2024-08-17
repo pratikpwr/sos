@@ -8,7 +8,7 @@ import 'package:sos_app/src/core/extensions/context_extension.dart';
 import 'package:sos_app/src/features/auth/repository/auth_repository.dart';
 import 'package:sos_app/src/features/sos_details/screen/receiver_sos_alert_screen.dart';
 
-import 'core/injector/injection_container.dart';
+import '../injector/injection_container.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
