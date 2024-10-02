@@ -79,14 +79,13 @@ class StartSOSScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));\
-                      //     context.pushScreen(ReceiverAlertScreen(
-                      //         sosId: 53));
-                      //   },
-                      //   child: Text('SOS Alert'),
-                      // ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // context.pushScreen(ReceiverSOSDetailsScreen(sosId: 38));\
+                          context.pushScreen(ReceiverAlertScreen(sosId: 57));
+                        },
+                        child: Text('SOS Alert'),
+                      ),
                     ],
                   ),
                 ),

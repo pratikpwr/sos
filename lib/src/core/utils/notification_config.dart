@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos_app/src/app.dart';
 import 'package:sos_app/src/core/extensions/context_extension.dart';
 import 'package:sos_app/src/features/auth/repository/auth_repository.dart';
 import 'package:sos_app/src/features/sos_details/screen/receiver_sos_alert_screen.dart';
@@ -103,8 +104,8 @@ class NotificationConfig {
     /// this executes when app is running in background
     /// i.e. it is running in background
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      context.navigator.push(MaterialPageRoute(builder: (context) {
-        return ReceiverAlertScreen(sosId: message.data['SOSId']);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) {
+        return ReceiverAlertScreen(sosId: int.parse(message.data['SOSId']));
       }));
     });
 
@@ -130,7 +131,7 @@ class NotificationConfig {
           notification.hashCode,
           notification.title,
           notification.body,
-          NotificationDetails(android: androidDetails),
+          NotificationDetails(android: androidDetails,),
         );
       }
     });

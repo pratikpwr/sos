@@ -123,7 +123,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, bool>> sendFCMToken({
     required String fcmToken,
   }) async {
-    final userId = prefs.get(PrefsConst.userId);
+    final userId = prefs.get(PrefsConst.userId) ?? 5;
     try {
       final result = await apiClient.request(
         HttpMethod.put,

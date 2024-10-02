@@ -10,6 +10,8 @@ import 'package:sos_app/src/ui/themes/text_theme.dart';
 
 import 'core/injector/injection_container.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -39,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         return Consumer<AuthStatusProvider>(
           builder: (context, provider, child) {
             return MaterialApp(
+              navigatorKey: navigatorKey,
               title: 'SOS App',
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
@@ -46,9 +49,7 @@ class _MyAppState extends State<MyApp> {
                 useMaterial3: true,
               ),
               debugShowCheckedModeBanner: false,
-              home: provider.isAuthenticated
-                  ? const SOSBottomNavBar()
-                  : SignInScreen(),
+              home: const SOSBottomNavBar(),
             );
           },
         );

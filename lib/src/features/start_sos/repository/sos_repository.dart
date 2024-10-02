@@ -29,18 +29,17 @@ class SOSRepositoryImpl implements SOSRepository {
   Future<Either<Failure, int>> sendSOS({Position? position}) async {
     int userId = 5;
 
-    final data = {
-      "lat": position?.latitude,
-      "long": position?.longitude,
-      "userId": userId,
-      "createdOn": DateTime.now().toIso8601String(),
-    };
 
     try {
       final result = await apiClient.request(
         HttpMethod.post,
         '$baseUrl/api/SOS',
-        body: jsonEncode(data),
+        body: jsonEncode({
+          "lat": position?.latitude,
+          "long": position?.longitude,
+          "userId": userId,
+          "createdOn": DateTime.now().toIso8601String(),
+        }),
       );
 
       if (result.statusCode != null && result.statusCode! < 250) {
