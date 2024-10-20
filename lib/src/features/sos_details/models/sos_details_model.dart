@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'user_details_model.dart';
+import 'package:sos_app/src/features/sos_details/models/sos_user_model.dart';
+
 
 SosDetailsModel sosDetailsFromJson(String str) =>
     SosDetailsModel.fromJson(json.decode(str));
@@ -15,8 +16,8 @@ class SosDetailsModel {
   final int userId;
   final double? lat;
   final double? long;
-  final UserDetailsModel userDetails;
-  final List<UserDetailsModel> acceptorUsers;
+  final SOSUserModel userDetails;
+  final List<SOSUserModel> acceptorUsers;
 
   SosDetailsModel({
     required this.sosId,
@@ -39,9 +40,9 @@ class SosDetailsModel {
         userId: json["userId"],
         lat: json["lat"],
         long: json["long"],
-        userDetails: UserDetailsModel.fromJson(json["userDetails"]),
-        acceptorUsers: List<UserDetailsModel>.from(
-            json["acceptorUsers"].map((x) => UserDetailsModel.fromJson(x))),
+        userDetails: SOSUserModel.fromJson(json["userDetails"]),
+        acceptorUsers: List<SOSUserModel>.from(
+            json["acceptorUsers"].map((x) => SOSUserModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

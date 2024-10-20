@@ -49,7 +49,8 @@ class _MyAppState extends State<MyApp> {
                 useMaterial3: true,
               ),
               debugShowCheckedModeBanner: false,
-              home: const SOSBottomNavBar(),
+              home:
+                  provider.isAuthenticated ? SOSBottomNavBar() : SignInScreen(),
             );
           },
         );

@@ -1,11 +1,11 @@
-class UserDetailsModel {
+class SOSUserModel {
   final int id;
   final String name;
   final String phone;
   final String? bloodGroup;
   final String? photoUrl;
 
-  UserDetailsModel({
+  SOSUserModel({
     required this.id,
     required this.name,
     required this.phone,
@@ -13,8 +13,8 @@ class UserDetailsModel {
     required this.photoUrl,
   });
 
-  factory UserDetailsModel.fromJson(Map<String, dynamic> json) =>
-      UserDetailsModel(
+  factory SOSUserModel.fromJson(Map<String, dynamic> json) =>
+      SOSUserModel(
         id: json["id"],
         name: json["name"],
         phone: json["phone"].toString(),

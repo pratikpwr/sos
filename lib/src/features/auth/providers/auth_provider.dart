@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sos_app/src/core/error/failure_types.dart';
+import 'package:sos_app/src/core/utils/utils.dart';
 import 'package:sos_app/src/features/auth/repository/auth_repository.dart';
 
 enum AuthState {
@@ -25,7 +26,7 @@ class AuthProvider extends ChangeNotifier {
 
   String? get error => _error;
 
-  Future<bool> signIn(String phone) async {
+  Future<AuthState> signIn(String phone) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -49,7 +50,7 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
       },
     );
-    return authState == AuthState.otpSent;
+    return authState;
   }
 
   Future<bool> signUp(String phone) async {

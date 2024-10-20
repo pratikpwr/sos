@@ -61,14 +61,17 @@ class ApiClientImpl implements ApiClient {
         data: body,
       );
       return response;
-    } on DioError catch (ex) {
+    } on DioException catch (ex) {
       switch (ex.response?.statusCode) {
         case 400:
           debugPrint("Request was invalid: ${ex.response?.data}");
           throw const ServerException('Invalid Request');
         case 403:
           debugPrint("Request Error: $ex");
-          throw ServerException(ex.response?.data['detail'] ?? "Server Error");
+          throw ServerException(ex.response?.data ?? "Server Error");
+        case 404:
+          debugPrint("Request Error: $ex");
+          throw NotFoundException(ex.response?.data ?? "Server Error");
         default:
           debugPrint("Request Error: $ex");
           throw const ServerException('Unknown Server Error');

@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sos_app/src/app.dart';
-import 'package:sos_app/src/core/extensions/context_extension.dart';
 import 'package:sos_app/src/features/auth/repository/auth_repository.dart';
 import 'package:sos_app/src/features/sos_details/screen/receiver_sos_alert_screen.dart';
 
@@ -36,13 +35,6 @@ class NotificationConfig {
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
-  ///[_newNotificationStreamController] is responsible for acknowledging the notification
-  ///listing screen to refresh the list when there is a new notification
-  static final StreamController<String> _newNotificationStreamController =
-      StreamController();
-  static final newNotificationStream =
-      _newNotificationStreamController.stream.asBroadcastStream();
-
   static init() async {
     if (await permissionStatus()) {
       addTokenListener();
@@ -54,14 +46,13 @@ class NotificationConfig {
     }
   }
 
-  static Future<String?> fcmToken() async =>
+  static Future<String?> fcmToken({int? userId}) async =>
       await FirebaseMessaging.instance.getToken().then((token) async {
         if (token != null) {
           final deviceInfo = sl<AuthRepository>();
-
-          await deviceInfo.sendFCMToken(fcmToken: token);
+          await deviceInfo.sendFCMToken(fcmToken: token, userId: userId);
         }
-        return null;
+        return token;
       });
 
   static void addTokenListener() {
@@ -115,10 +106,6 @@ class NotificationConfig {
       AndroidNotification? android = message.notification?.android;
 
       if (notification != null && android != null) {
-        ///adding new notification in to the stream so that listing screen
-        ///can listen and update itself
-        _newNotificationStreamController.sink.add(notification.title ?? '');
-
         final androidDetails = AndroidNotificationDetails(
           channel.id,
           channel.name,
@@ -131,7 +118,9 @@ class NotificationConfig {
           notification.hashCode,
           notification.title,
           notification.body,
-          NotificationDetails(android: androidDetails,),
+          NotificationDetails(
+            android: androidDetails,
+          ),
         );
       }
     });

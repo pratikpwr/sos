@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sos_app/src/features/sos_details/models/sos_user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extensions/context_extension.dart';
-import '../models/user_details_model.dart';
 
 class PersonSummaryWidget extends StatelessWidget {
   const PersonSummaryWidget({
@@ -10,7 +10,7 @@ class PersonSummaryWidget extends StatelessWidget {
     required this.person,
   });
 
-  final UserDetailsModel person;
+  final SOSUserModel person;
 
   @override
   Widget build(BuildContext context) {

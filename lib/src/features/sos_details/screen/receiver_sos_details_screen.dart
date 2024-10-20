@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sos_app/src/features/sos_details/models/sos_user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extensions/context_extension.dart';
@@ -8,7 +9,6 @@ import '../../../core/injector/injection_container.dart';
 import '../../../ui/atomic/molecules/current_location_widget.dart';
 import '../../../ui/atomic/molecules/network_gallery_view.dart';
 import '../../../ui/themes/colors.dart';
-import '../models/user_details_model.dart';
 import '../providers/sos_details_provider.dart';
 import '../widgets/person_summary_widget.dart';
 
@@ -139,7 +139,7 @@ class ReceiverSOSDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget userDetails(BuildContext context, UserDetailsModel user) {
+  Widget userDetails(BuildContext context, SOSUserModel user) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 12,

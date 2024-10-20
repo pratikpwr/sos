@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sos_app/src/core/constants/network.dart';
+import 'package:sos_app/src/core/constants/prefs_const.dart';
 import 'package:sos_app/src/core/error/failures.dart';
 import 'package:sos_app/src/core/network/api_client.dart';
 
@@ -27,8 +28,7 @@ class SOSRepositoryImpl implements SOSRepository {
 
   @override
   Future<Either<Failure, int>> sendSOS({Position? position}) async {
-    int userId = 5;
-
+    int userId = await prefs.get(PrefsConst.userId);
 
     try {
       final result = await apiClient.request(

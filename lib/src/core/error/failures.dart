@@ -37,3 +37,7 @@ class NoInternetFailure extends Failure {
 class LocationFailure extends Failure {
   const LocationFailure([super.message]);
 }
+
+class NotFoundFailure extends Failure {
+  const NotFoundFailure([super.message]);
+}

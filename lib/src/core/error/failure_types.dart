@@ -18,6 +18,8 @@ enum FailureType {
         return FailureType.noInternet;
       case InternalFailure:
         return FailureType.internal;
+      case NotFoundFailure:
+        return FailureType.notFound;
       default:
         return FailureType.unknown;
     }

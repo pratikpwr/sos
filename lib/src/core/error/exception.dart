@@ -27,3 +27,9 @@ class InternalException implements Exception {
 
   const InternalException(this.ex);
 }
+
+class NotFoundException implements Exception {
+  final String ex;
+
+  const NotFoundException(this.ex);
+}

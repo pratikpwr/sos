@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:sos_app/src/core/constants/prefs_const.dart';
+import 'package:sos_app/src/core/error/exception.dart';
 import 'package:sos_app/src/core/error/failures.dart';
-import 'package:sos_app/src/features/sos_details/models/user_details_model.dart';
+import 'package:sos_app/src/core/utils/notification_config.dart';
+import 'package:sos_app/src/features/auth/models/user_profile_model.dart';
 
 import '../../../core/constants/network.dart';
 import '../../../core/network/api_client.dart';
@@ -16,16 +18,17 @@ abstract class AuthRepository {
     required String phone,
   });
 
-  Future<Either<Failure, UserDetailsModel>> verifyOtp({
+  Future<Either<Failure, UserProfileModel>> verifyOtp({
     required String phone,
     required String otp,
     required bool isSignIn,
   });
 
-  Future<Either<Failure, UserDetailsModel?>> getCurrentUser();
+  Future<Either<Failure, UserProfileModel?>> getCurrentUser();
 
   Future<Either<Failure, bool>> sendFCMToken({
     required String fcmToken,
+    int? userId,
   });
 }
 
@@ -39,18 +42,19 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, UserDetailsModel?>> getCurrentUser() async {
+  Future<Either<Failure, UserProfileModel?>> getCurrentUser() async {
     final userJson = await prefs.get(PrefsConst.currentUser);
     if (userJson == null) {
       return const Left(CacheFailure());
     }
-    return Right(UserDetailsModel.fromJson(userJson));
+    return Right(userProfileModelFromJson(userJson));
   }
 
-  Future<bool> saveUser(UserDetailsModel user) async {
+  Future<bool> saveUser(UserProfileModel user) async {
     await prefs.init();
-    await prefs.set(PrefsConst.userId, user.id);
-    return await prefs.set(PrefsConst.currentUser, user.toJson());
+    await prefs.set(PrefsConst.userId, user.userId);
+    return await prefs.set(
+        PrefsConst.currentUser, userProfileModelToJson(user));
   }
 
   @override
@@ -61,13 +65,13 @@ class AuthRepositoryImpl implements AuthRepository {
         '$baseUrl/api/SignIn/$phone',
       );
 
-      if (result.statusCode == 404) {
-        return Left(NoDataFailure('User not found'));
-      } else if (result.statusCode == 200) {
-        return Right(true);
+      if (result.statusCode == 200) {
+        return const Right(true);
       } else {
         return Left(ServerFailure(result.data['message']));
       }
+    } on NotFoundException catch (err) {
+      return const Left(NotFoundFailure());
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -86,13 +90,15 @@ class AuthRepositoryImpl implements AuthRepository {
       } else {
         return Left(ServerFailure(result.data['message']));
       }
+    } on NotFoundException catch (err) {
+      return const Left(NotFoundFailure());
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, UserDetailsModel>> verifyOtp({
+  Future<Either<Failure, UserProfileModel>> verifyOtp({
     required String phone,
     required String otp,
     required bool isSignIn,
@@ -108,8 +114,9 @@ class AuthRepositoryImpl implements AuthRepository {
       if (result.statusCode == 404) {
         return Left(NoDataFailure('User not found'));
       } else if (result.statusCode == 200) {
-        final user = UserDetailsModel.fromJson(result.data['data']);
-        saveUser(user);
+        final user = UserProfileModel.fromJson(result.data);
+        await saveUser(user);
+        NotificationConfig.fcmToken(userId: user.userId);
         return Right(user);
       } else {
         return Left(ServerFailure(result.data['message']));
@@ -122,12 +129,13 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, bool>> sendFCMToken({
     required String fcmToken,
+    int? userId,
   }) async {
-    final userId = prefs.get(PrefsConst.userId) ?? 5;
+    final user = userId ?? prefs.get(PrefsConst.userId);
     try {
       final result = await apiClient.request(
         HttpMethod.put,
-        '$baseUrl/api/FCMToken/$userId',
+        '$baseUrl/api/FCMToken/$user',
         body: {
           'fcmToken': fcmToken,
         },

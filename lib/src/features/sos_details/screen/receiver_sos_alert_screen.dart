@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sos_app/src/features/sos_details/models/user_details_model.dart';
+import 'package:sos_app/src/features/sos_details/models/sos_user_model.dart';
 import 'package:sos_app/src/features/sos_details/providers/receiver_alert_provider.dart';
 import 'package:sos_app/src/features/sos_details/screen/receiver_sos_details_screen.dart';
 import 'package:sos_app/src/ui/atomic/molecules/current_location_widget.dart';
@@ -159,7 +159,7 @@ class ReceiverAlertScreen extends StatelessWidget {
     );
   }
 
-  Widget userDetails(BuildContext context, UserDetailsModel user) {
+  Widget userDetails(BuildContext context, SOSUserModel user) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 12,
