@@ -24,7 +24,7 @@ class AuthProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  String? get error => _error;
+  String get error => _error ?? "Something went Wrong!";
 
   Future<AuthState> signIn(String phone) async {
     _isLoading = true;
@@ -53,7 +53,7 @@ class AuthProvider extends ChangeNotifier {
     return authState;
   }
 
-  Future<bool> signUp(String phone) async {
+  Future<AuthState> signUp(String phone) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -74,7 +74,7 @@ class AuthProvider extends ChangeNotifier {
       },
     );
 
-    return authState == AuthState.otpSent;
+    return authState;
   }
 
   Future<bool> verifyOtp({

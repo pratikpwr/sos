@@ -82,7 +82,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await apiClient.request(
         HttpMethod.get,
-        '$baseUrl/api/SignUp/$phone',
+        '$baseUrl/api/SingUp/$phone',
       );
 
       if (result.statusCode == 200) {
@@ -92,6 +92,8 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } on NotFoundException catch (err) {
       return const Left(NotFoundFailure());
+    } on ServerException catch (er) {
+      return Left(ServerFailure(er.ex));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -118,6 +120,8 @@ class AuthRepositoryImpl implements AuthRepository {
         await saveUser(user);
         NotificationConfig.fcmToken(userId: user.userId);
         return Right(user);
+      } else if (result.statusCode == 201) {
+        return Left(ServerFailure("Not implemented"));
       } else {
         return Left(ServerFailure(result.data['message']));
       }

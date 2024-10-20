@@ -95,11 +95,13 @@ class SignUpScreen extends StatelessWidget {
                     }
                     FocusScope.of(context).unfocus();
                     final result = await authProvider.signUp(phone);
-                    if (result) {
+                    if (result == AuthState.otpSent) {
                       context.pushScreen(VerifyOtpScreen(
                         phoneNumber: phone,
                         isSignIn: false,
                       ));
+                    } else {
+                      showSnackBar(context, authProvider.error ?? "Something went wrong!");
                     }
                   },
                 )
